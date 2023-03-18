@@ -1,0 +1,10 @@
+.AppBar {
+  height: 70px;
+  justify-content: center;
+}
+
+.Logo {
+  width: auto;
+  height: 46.12px;
+  padding-left: 20px;
+}
