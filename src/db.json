@@ -1,0 +1,44 @@
+{
+  "salesData": [
+    {
+      "description": "descrição lorem",
+      "status": {
+        "id": "1",
+        "name": "Concluido"
+      },
+      "client": "Teste",
+      "saleDate": "22/12/22",
+      "cost": 500,
+      "weigth": 500,
+      "id": 1
+    }
+  ],
+  "status": [
+    {
+      "id": 1,
+      "status": "Concluido"
+    },
+    {
+      "id": 2,
+      "status": "inconcluido"
+    }
+  ],
+  "client": [
+    {
+      "id": 1,
+      "name": "Cândido Figueiredo Semedo"
+    },
+    {
+      "id": 2,
+      "name": "Danilo Lameiras da Costa"
+    },
+    {
+      "id": 3,
+      "name": "Samir Afonso Tabanez"
+    },
+    {
+      "id": 4,
+      "name": "Saúl Ourique Sandinha"
+    }
+  ]
+}
