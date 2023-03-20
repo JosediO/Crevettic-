@@ -8,6 +8,7 @@ import {
   CardContent,
   MenuItem,
 } from "@mui/material";
+
 import "./Formulario.css";
 
 const Formulario = () => {
@@ -28,22 +29,26 @@ const Formulario = () => {
             validate={(values) => {
               const errors = {};
               if (!values.description) {
-                errors.description = "Descrição é obrigatória";
+                errors.description = "A descrição é obrigatória";
               }
               if (!values.status) {
-                errors.status = "Status obrigatório";
+                errors.status = "O Status é obrigatório";
               }
               if (!values.client) {
-                errors.client = "Cliente obrigatório";
+                errors.client = "O Cliente é obrigatório";
               }
               if (!values.dateOfsell) {
-                errors.dateOfsell = "Data da venda é obrigatório";
+                errors.dateOfsell = "A Data da venda é obrigatório";
               }
               if (!values.weight) {
-                errors.weight = "Peso é obrigatório";
+                errors.weight = "O Peso é obrigatório";
+              } else if (values.weight < 0) {
+                errors.weight = "O Peso é invalido";
               }
               if (!values.budget) {
-                errors.budget = "Valor da venda é obrigatório";
+                errors.budget = "O Valor da venda é obrigatório";
+              } else if (values.budget <= 0) {
+                errors.budget = "O Valor é invalido";
               }
               return errors;
             }}
@@ -83,6 +88,7 @@ const Formulario = () => {
                       >
                         <MenuItem value={10}>Concluido</MenuItem>
                         <MenuItem value={20}>Incompleto</MenuItem>
+                        <TextField></TextField>
                       </TextField>
                     )}
                   </Field>
