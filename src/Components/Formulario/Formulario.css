@@ -41,36 +41,14 @@
   gap: 14px;
 }
 
-.venda {
-  width: 33.3%;
-}
-
-.peso {
-  width: 33.3%;
-}
-
-.preco {
-  width: 33.3%;
-}
-
 .btnInputs {
   display: flex;
   justify-content: space-between;
   flex-direction: row-reverse;
-  margin-top: 14px;
+  margin-top: 25px;
 }
 
 .btn {
   width: 49%;
   border-radius: 5px;
-}
-
-@media screen and (max-width: 500px) {
-  .status {
-    width: 33%;
-  }
-
-  .cliente {
-    width: 67%;
-  }
 }
