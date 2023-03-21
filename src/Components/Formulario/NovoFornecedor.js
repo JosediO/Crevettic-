@@ -1,5 +1,6 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import "./NovoFornecedor.css";
+import axios from "axios";
 import { Formik, Form, Field } from "formik";
 import {
   TextField,
@@ -11,6 +12,35 @@ import {
 } from "@mui/material";
 
 function NovoFornecedor() {
+  const [uf, setUf] = useState([]);
+  const [mun, setMun] = useState([]);
+
+  useEffect(() => {
+    axios
+      .get(
+        "https://servicodados.ibge.gov.br/api/v1/localidades/estados?orderBy=nome"
+      )
+      .then((resp) => {
+        setUf(resp.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, []);
+
+  useEffect(() => {
+    axios
+      .get(
+        "https://servicodados.ibge.gov.br/api/v1/localidades/estados/${}/municipios"
+      )
+      .then((resp) => {
+        setMun(resp.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, []);
+
   return (
     <div>
       <Box className="containerCard">
@@ -40,16 +70,19 @@ function NovoFornecedor() {
                 if (!values.state) {
                   errors.state = "O estado é obrigatório";
                 }
-                if (!values.city) {
-                  errors.city = "A cidade é obrigatória";
+                if (!values.state && !values.city) {
+                  errors.city = "Selecione o estado primeiro";
+                }
+                if (!values.city && values.state && !values.city) {
+                  errors.city = "A cidade é obrigatoria";
                 }
                 if (!values.phone) {
-                  errors.budget = "O telefone é obrigatório";
+                  errors.phone = "O telefone é obrigatório";
                 } else if (
                   values.phone.length <= 0 &&
                   values.phone.length === 11
                 ) {
-                  errors.budget = "O telefone é invalido";
+                  errors.phone = "O telefone é invalido";
                 }
                 return errors;
               }}
@@ -115,33 +148,11 @@ function NovoFornecedor() {
                           error={touched.state && Boolean(errors.state)}
                           helperText={touched.state && errors.state}
                         >
-                          <MenuItem>Acre</MenuItem>
-                          <MenuItem>Alagoas</MenuItem>
-                          <MenuItem>Amapá</MenuItem>
-                          <MenuItem>Amazonas</MenuItem>
-                          <MenuItem>Bahia</MenuItem>
-                          <MenuItem>Ceará</MenuItem>
-                          <MenuItem>Destrito Federal</MenuItem>
-                          <MenuItem>Espirito Santo</MenuItem>
-                          <MenuItem>Goiás</MenuItem>
-                          <MenuItem>Maranhão</MenuItem>
-                          <MenuItem>Mato Grosso</MenuItem>
-                          <MenuItem>Mato Grosso do Sul</MenuItem>
-                          <MenuItem>Minas Gerais</MenuItem>
-                          <MenuItem>Pará</MenuItem>
-                          <MenuItem>Paraíba</MenuItem>
-                          <MenuItem>Paraná</MenuItem>
-                          <MenuItem>Pernanbuco</MenuItem>
-                          <MenuItem>Piauí</MenuItem>
-                          <MenuItem>Rio de Janeiro</MenuItem>
-                          <MenuItem>Rio Grande do Norte</MenuItem>
-                          <MenuItem>Rio Grande do Sul</MenuItem>
-                          <MenuItem>Rondônia</MenuItem>
-                          <MenuItem>Roraima</MenuItem>
-                          <MenuItem>Santa Catarina</MenuItem>
-                          <MenuItem>São Paulo</MenuItem>
-                          <MenuItem>Sergipe</MenuItem>
-                          <MenuItem>Tocantins</MenuItem>
+                          {uf.map((uf) => (
+                            <MenuItem key={uf.id} value={uf.id}>
+                              {uf.nome}
+                            </MenuItem>
+                          ))}
                         </TextField>
                       )}
                     </Field>
@@ -156,7 +167,11 @@ function NovoFornecedor() {
                           variant="outlined"
                           error={touched.city && Boolean(errors.city)}
                           helperText={touched.city && errors.city}
-                        />
+                        >
+                          {mun.map((mun) => (
+                            <MenuItem key={mun.id}>{mun.nome}</MenuItem>
+                          ))}
+                        </TextField>
                       )}
                     </Field>
                     <Field name="phone">
@@ -177,20 +192,16 @@ function NovoFornecedor() {
                   </div>
                   <br />
                   <div className="btnInputs">
+                    <Button className="btn" variant="outlined" color="primary">
+                      Voltar
+                    </Button>
                     <Button
                       className="btn"
                       type="submit"
                       variant="contained"
                       color="primary"
                     >
-                      Enviar
-                    </Button>
-                    <Button
-                      className="btn"
-                      variant="contained"
-                      color="secondary"
-                    >
-                      Voltar
+                      Salvar
                     </Button>
                   </div>
                 </Form>

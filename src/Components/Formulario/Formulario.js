@@ -26,6 +26,19 @@ const Formulario = () => {
       });
   }, []);
 
+  const [client, setClient] = useState([]);
+
+  useEffect(() => {
+    axios
+      .get("http://localhost:4000/client")
+      .then((resp) => {
+        setClient(resp.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, []);
+
   return (
     <Box className="containerCard">
       <Card sx={{ borderRadius: 4, width: "78%", margin: "auto", mt: "75px" }}>
@@ -100,10 +113,6 @@ const Formulario = () => {
                         error={touched.status && Boolean(errors.status)}
                         helperText={touched.status && errors.status}
                       >
-                        {/* <MenuItem value={10}>Concluido</MenuItem>
-                        <MenuItem value={20}>Incompleto</MenuItem>
-                        <TextField></TextField> */}
-
                         {status.map((status) => (
                           <MenuItem key={status.id} value={status.id}>
                             {status.name}
@@ -124,8 +133,11 @@ const Formulario = () => {
                         error={touched.client && Boolean(errors.client)}
                         helperText={touched.client && errors.client}
                       >
-                        <MenuItem value={10}>cliente 1</MenuItem>
-                        <MenuItem value={20}>cliente 2</MenuItem>
+                        {client.map((client) => (
+                          <MenuItem key={client.id} value={client.id}>
+                            {client.name}
+                          </MenuItem>
+                        ))}
                       </TextField>
                     )}
                   </Field>
