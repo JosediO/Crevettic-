@@ -1,5 +1,6 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Formik, Form, Field } from "formik";
+import axios from "axios";
 import {
   TextField,
   Button,
@@ -12,6 +13,19 @@ import {
 import "./Formulario.css";
 
 const Formulario = () => {
+  const [status, setStatus] = useState([]);
+
+  useEffect(() => {
+    axios
+      .get("http://localhost:4000/status")
+      .then((resp) => {
+        setStatus(resp.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, []);
+
   return (
     <Box className="containerCard">
       <Card sx={{ borderRadius: 4, width: "78%", margin: "auto", mt: "75px" }}>
@@ -86,9 +100,15 @@ const Formulario = () => {
                         error={touched.status && Boolean(errors.status)}
                         helperText={touched.status && errors.status}
                       >
-                        <MenuItem value={10}>Concluido</MenuItem>
+                        {/* <MenuItem value={10}>Concluido</MenuItem>
                         <MenuItem value={20}>Incompleto</MenuItem>
-                        <TextField></TextField>
+                        <TextField></TextField> */}
+
+                        {status.map((status) => (
+                          <MenuItem key={status.id} value={status.id}>
+                            {status.name}
+                          </MenuItem>
+                        ))}
                       </TextField>
                     )}
                   </Field>

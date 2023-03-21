@@ -16,11 +16,13 @@
   "status": [
     {
       "id": 1,
-      "status": "Concluido"
+      "name": "Concluido",
+      "value": "1"
     },
     {
       "id": 2,
-      "status": "inconcluido"
+      "name": "Inconcluido",
+      "value": "2"
     }
   ],
   "client": [
