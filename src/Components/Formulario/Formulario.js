@@ -1,20 +1,20 @@
-import React, { useEffect, useState } from "react";
-import { Formik, Form, Field } from "formik";
-import axios from "axios";
+import "./Formulario.css";
+
 import {
-  TextField,
-  Button,
   Box,
+  Button,
   Card,
   CardContent,
   MenuItem,
+  Paper,
+  TextField,
 } from "@mui/material";
-
-import "./Formulario.css";
+import axios from "axios";
+import { Field, Form, Formik } from "formik";
+import React, { useEffect, useState } from "react";
 
 const Formulario = () => {
   const [status, setStatus] = useState([]);
-
   useEffect(() => {
     axios
       .get("http://localhost:4000/status")
@@ -39,11 +39,25 @@ const Formulario = () => {
       });
   }, []);
 
+  useEffect(() => {
+    axios
+      .get("http://localhost:4000/client")
+      .then((resp) => {
+        setClient(resp.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, []);
+
   return (
-    <Box className="containerCard">
+    <Box className="containerForm ">
       <Card sx={{ borderRadius: 4, width: "78%", margin: "auto", mt: "75px" }}>
         <CardContent>
-          <p className="title">Dados da Venda</p>
+          <div>
+            <p className="title">Dados da Venda</p>
+            <div></div>
+          </div>
           <Formik
             initialValues={{
               description: "",
@@ -138,6 +152,12 @@ const Formulario = () => {
                             {client.name}
                           </MenuItem>
                         ))}
+
+                        <MenuItem>
+                          <Paper className="newFor" sx={{ p: 1 }}>
+                            Cadastrar Novo Fornecedor
+                          </Paper>
+                        </MenuItem>
                       </TextField>
                     )}
                   </Field>

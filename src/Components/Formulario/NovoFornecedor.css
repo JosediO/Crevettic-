@@ -4,20 +4,31 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: #fafafa;
+  background-color: #54545480;
+  z-index: 2;
 }
 
 .title {
   font-size: 20px;
   font-weight: bold;
 }
-.line2 {
+.line2nf {
   display: flex;
   justify-content: space-between;
   gap: 14px;
 }
-.line3 {
+.line3nf {
   display: flex;
   justify-content: space-between;
   gap: 14px;
+}
+
+.btnInputs {
+  display: flex;
+  justify-content: flex-end;
+  gap: 14px;
+}
+
+.btnNf {
+  width: 40%;
 }

@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import "./NovoFornecedor.css";
+import InputMask from "react-input-mask";
 import axios from "axios";
 import { Formik, Form, Field } from "formik";
 import {
@@ -12,8 +13,13 @@ import {
 } from "@mui/material";
 
 function NovoFornecedor() {
-  const [uf, setUf] = useState([]);
+  const [estados, setUf] = useState([]);
   const [mun, setMun] = useState([]);
+  const [phone, setPhone] = useState("");
+
+  const handlePhoneChange = (event) => {
+    setPhone(event.target.value);
+  };
 
   useEffect(() => {
     axios
@@ -28,25 +34,27 @@ function NovoFornecedor() {
       });
   }, []);
 
-  useEffect(() => {
-    axios
-      .get(
-        "https://servicodados.ibge.gov.br/api/v1/localidades/estados/${}/municipios"
-      )
-      .then((resp) => {
-        setMun(resp.data);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  }, []);
+  function SetarMun(estadoId) {
+    useEffect(() => {
+      axios
+        .get(
+          `https://servicodados.ibge.gov.br/api/v1/localidades/estados/${estadoId}/municipios`
+        )
+        .then((resp) => {
+          setMun(resp.data);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }, [estadoId]);
+  }
 
   return (
     <div>
       <Box className="containerCard">
         <Card>
           <CardContent>
-            <p className="title">Adcionar Novo Cliente</p>
+            <p className="title">Adicionar Novo Cliente</p>
             <Formik
               initialValues={{
                 name: "",
@@ -107,7 +115,7 @@ function NovoFornecedor() {
                     )}
                   </Field>
                   <br />
-                  <div className="line2">
+                  <div className="line2nf">
                     <Field name="street">
                       {({ field }) => (
                         <TextField
@@ -135,7 +143,7 @@ function NovoFornecedor() {
                       )}
                     </Field>
                   </div>
-                  <div className="line3">
+                  <div className="line3nf">
                     <Field name="state">
                       {({ field }) => (
                         <TextField
@@ -148,9 +156,13 @@ function NovoFornecedor() {
                           error={touched.state && Boolean(errors.state)}
                           helperText={touched.state && errors.state}
                         >
-                          {uf.map((uf) => (
-                            <MenuItem key={uf.id} value={uf.id}>
-                              {uf.nome}
+                          {estados.map((estados) => (
+                            <MenuItem
+                              key={estados.id}
+                              value={estados.id}
+                              onClick={() => SetarMun(estados.id)}
+                            >
+                              {estados.sigla}
                             </MenuItem>
                           ))}
                         </TextField>
@@ -169,39 +181,51 @@ function NovoFornecedor() {
                           helperText={touched.city && errors.city}
                         >
                           {mun.map((mun) => (
-                            <MenuItem key={mun.id}>{mun.nome}</MenuItem>
+                            <MenuItem key={mun.id} value={mun.id}>
+                              {mun.nome}
+                            </MenuItem>
                           ))}
                         </TextField>
                       )}
                     </Field>
-                    <Field name="phone">
+                    <Field name="phone" autoComplete="off">
                       {({ field }) => (
                         <TextField
                           sx={{ width: "33%" }}
                           {...field}
                           label="Telefone"
                           number
-                          autoComplete="off"
                           margin="dense"
                           variant="outlined"
                           error={touched.phone && Boolean(errors.phone)}
                           helperText={touched.phone && errors.phone}
+                          InputProps={{
+                            inputComponent: InputMask,
+                            inputProps: {
+                              mask: "(99) 9 9999-9999",
+                              handlePhoneChange,
+                            },
+                          }}
                         />
                       )}
                     </Field>
                   </div>
                   <br />
                   <div className="btnInputs">
-                    <Button className="btn" variant="outlined" color="primary">
-                      Voltar
+                    <Button
+                      className="btnNf"
+                      variant="outlined"
+                      color="primary"
+                    >
+                      Cancelar
                     </Button>
                     <Button
-                      className="btn"
+                      className="btnNf"
                       type="submit"
                       variant="contained"
                       color="primary"
                     >
-                      Salvar
+                      Adicionar
                     </Button>
                   </div>
                 </Form>
